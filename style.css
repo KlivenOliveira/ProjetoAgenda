@@ -1,0 +1,246 @@
+body {
+    display: flex;
+    justify-content: center;
+    background-color: #f4f4f4; /* Fundo mais claro */
+    margin: 0;
+}
+
+.pagination, .pagination-container, .page-item, .page-link {
+    background-color: #388e3c !important;
+
+}
+
+.tituloTabela{
+    font-weight: bold!important;
+}
+
+#corpoTabela td{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5)!important;
+}
+
+/* Ajusta a UL para que ela não ocupe o espaço todo */
+.pagination {
+    display: flex!important;
+    justify-content: center!important;
+    margin-bottom: 0!important;
+    padding: 0!important;
+    width: 50px!important;
+
+}
+
+
+/* Definir a cor dos links */
+.page-link {
+    color: #f4f4f4 !important;
+}
+
+/* Alterar a cor ao passar o mouse (hover) */
+.page-link:hover {
+    color: #007bff !important; /* Você pode mudar essa cor para o que preferir */
+}
+
+
+.pagination, .pagination-container{
+    margin:auto;
+    margin-left: 42%;
+}
+
+#container {
+    width: 90%;
+    background-color: #e6efec; /* Fundo mais claro para o container */
+    padding: min(20px,5px);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombras mais sutis */
+}
+
+.titulo {
+    background-color: #4CAF50; /* Verde suave */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombras mais sutis */
+    display: flex;
+    flex-direction: column; /* Alinha os itens verticalmente */
+    align-items: center;
+    border-radius: 5px;
+    border: 2px solid rgba(221, 221, 221, 0.5); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    padding-bottom: 1px;
+}
+
+.titulo p {
+    color:#fff;
+    padding: min(10px,5px);
+}
+
+#titulo_inicial{
+    border-bottom: 2px solid rgb(12, 133, 76);
+}
+
+#descricaoInicial{
+    border-bottom: 2px solid rgb(12, 133, 76);
+}
+
+.titulo_menu{
+    display: flex;
+    background-color: aqua;
+    text-align: left;
+}
+
+#Menu{
+    display: flex;
+    flex-direction: row; /* Garante que os itens fiquem alinhados horizontalmente */
+    background-color: #388E3C; /* Cor única para o menu, um verde mais escuro */
+    font-size: 20px;
+    color: #fff;
+    padding: 05px 0;
+    border-radius: 5px; /* Bordas arredondadas para dar um efeito suave */
+    width: 100%;
+}
+
+#Menu {
+    display: flex;
+   
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#removeLinha{
+    margin-left:85px;
+}
+
+.linha :hover{
+ cursor: pointer;
+}
+
+#Menu input{
+    border-radius:10px;
+}
+
+
+
+#titulo_inicial {
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+
+.linhaBTN {
+    background-color: #2E7D32; /* Verde escuro */
+    color: white;
+    border: none;
+    padding: 7px 11px;
+    font-size: 10px;
+    text-transform: uppercase;
+    border-radius: 10px!important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.linhaBTN:hover {
+    background-color: #1B5E20; /* Verde mais escuro no hover */
+    transform: scale(1.05);
+}
+
+.linhaBTN:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+
+#tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin: auto;
+    border-spacing: 0;
+}
+
+.tituloTabela {
+    text-align: left;
+    padding: 5px;
+    font-size:18px;
+    font-weight: 100;
+    background-color: #4CAF50; 
+    color:#fff;
+    border: 2px solid rgba(221, 221, 221, 0.5); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+}
+
+.checkBoxTbl input[type="checkbox"] {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #4CAF50; 
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease; 
+}
+
+
+.checkBoxTbl input[type="checkbox"]:checked {
+    background-color: #4CAF50; 
+    border-color: #4CAF50; 
+}
+
+
+
+.checkBoxTbl input[type="checkbox"]:checked::before {
+    content: '\2713'; 
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: -4px;
+    left: 2px;
+}
+
+#selecionarTudo{
+    cursor: pointer; 
+    text-decoration: none; 
+}
+
+#selecionarTudo i{
+    font-size: 20px; /* Tamanho do ícone */
+    color: #fff;
+}
+
+.checkBoxTbl input[type="checkbox"]:hover {
+    border-color: #388E3C; 
+}
+
+
+.checkBoxTbl input[type="checkbox"] + label {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.checkBoxTbl{
+    text-align: center;
+}
+
+.chkbTitulo{
+    text-align: center;
+}
+
+.conteudoTabela {
+    border: 2px solid rgba(221, 221, 221, 0.5); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    padding: min(2px,5px);
+    color: #333; 
+    background-color: #f9f9f9;
+    text-indent: 1px;  
+}
+
+tr:nth-child(even) {
+    background-color: #f1f1f1; 
+}
+
+tr:hover {
+    background-color: #e2e2e2; 
+}
+
+.pesquisar{
+    padding: min(2px,5px);
+}
