@@ -14,6 +14,10 @@ body {
     font-weight: bold!important;
 }
 
+.ativo{
+    border-color:red!important;
+}
+
 #corpoTabela td{
     border-bottom: 1px solid rgba(0, 0, 0, 0.5)!important;
 }
@@ -138,6 +142,10 @@ body {
 .linhaBTN:hover {
     background-color: #1B5E20; /* Verde mais escuro no hover */
     transform: scale(1.05);
+}
+
+.page-item.ativo  {
+    font-weight: bold;
 }
 
 .linhaBTN:active {

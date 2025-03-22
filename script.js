@@ -1,5 +1,6 @@
 var indice = localStorage.getItem('indice') ? parseInt(localStorage.getItem('indice')) : 0;
-
+let paginaAtual = 1;
+const itensPorPagina = 15;
 var novoId = ''
 $( document ).ready(function(){
   
@@ -11,8 +12,84 @@ $( document ).ready(function(){
     } else {
         AddRow('',true)
     }
+    carregarPaginacao()
   
 })
+
+function carregarTabela() {
+    let linhas = retornaLinhas();
+    let inicio = (paginaAtual - 1) * itensPorPagina;
+    let fim = inicio + itensPorPagina;
+    let dadosPagina = linhas.slice(inicio, fim);
+
+    $('#corpoTabela').html(
+        dadosPagina.map(linha => `
+            <tr id="${linha.id}" class="linhaTabela">
+                <td class="conteudoTabela checkBoxTbl"><input type="checkbox"></td>
+                <td class="conteudoTabela id" disabled>${linha.conteudo.indice}</td>
+                ${linha.conteudo.colunas.map(coluna => `<td class="conteudoTabela" contenteditable="true">${coluna}</td>`).join('')}
+            </tr>
+        `).join('')
+    );
+}
+
+function retornaLinhas() {
+    let linhas = JSON.parse(localStorage.getItem('linhas')) || [];
+    return linhas;
+}
+
+
+
+function carregarPaginacao() {
+    let linhas = retornaLinhas();  
+    let totalPaginas = Math.ceil(linhas.length / itensPorPagina);
+    totalPaginas = totalPaginas === 0 ? 1 : totalPaginas;
+    let paginacaoHTML = ''; 
+
+    for (let i = 1; i <= totalPaginas; i++) {
+        paginacaoHTML += `<li class="page-item ${i === paginaAtual ? 'ativo' : ''}">
+            <a class="page-link page-num" href="#" data-page="${i}">${i}</a>
+        </li>`;
+    }
+
+    $('.pagination').html(`
+        <li class="page-item ${paginaAtual === 1 ? 'disabled' : ''}">
+            <a class="page-link prev-page" href="#"><i class="fas fa-chevron-left"></i></a>
+        </li>
+        ${paginacaoHTML}
+        <li class="page-item ${paginaAtual === totalPaginas ? 'disabled' : ''}">
+            <a class="page-link next-page" href="#"><i class="fas fa-chevron-right"></i></a>
+        </li>
+    `);
+
+    // Navegar entre páginas
+    $('.page-num').click(function (e) {
+        e.preventDefault();
+        paginaAtual = parseInt($(this).data('page'));
+        carregarTabela();
+        carregarPaginacao();
+    });
+
+    // Navegar para a página anterior
+    $('.prev-page').click(function (e) {
+        e.preventDefault();
+        if (paginaAtual > 1) {
+            paginaAtual--;
+            carregarTabela();
+            carregarPaginacao();
+        }
+    });
+
+    // Navegar para a próxima página
+    $('.next-page').click(function (e) {
+        e.preventDefault();
+        if (paginaAtual < totalPaginas) {
+            paginaAtual++;
+            carregarTabela();
+            carregarPaginacao();
+        }
+    });
+}
 
 function salvamentoLocal() {
     var id = $('tr[class^="linhaTabela"]');
@@ -57,8 +134,23 @@ function salvarDados() {
 
         linhasSalvas.push(novaLinha);
     });
+    if (linhasSalvas.length/10 == 0){
+        carregarPaginacao()
+    }
 
     localStorage.setItem('linhas', JSON.stringify(linhasSalvas));  
+
+    let totalPaginas = Math.ceil(linhasSalvas.length / 10);
+
+    // Ajusta a página atual se necessário
+    if (paginaAtual > totalPaginas) {
+        paginaAtual = totalPaginas;
+    }
+
+    // Atualiza a paginação e a tabela
+    carregarPaginacao();
+    carregarTabela();
+
 }
 
 
