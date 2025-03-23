@@ -3,7 +3,7 @@ let paginaAtual = 1;
 const itensPorPagina = 15;
 var novoId = ''
 $( document ).ready(function(){
-    
+
     recuperarDados() 
     var id = $('tr[class^="linhaTabela"]');
     count = id.length;
@@ -12,7 +12,6 @@ $( document ).ready(function(){
     } else {
         AddRow('',true)
     }
-
     mudaCampos();
 })
 
@@ -28,7 +27,6 @@ function retornaLinhas() {
 function carregarPaginacao(totalPaginas) {
     let paginacaoHTML = '';
     
-    // Garante que o total de páginas seja sempre pelo menos 1
     totalPaginas = totalPaginas === 0 ? 1 : totalPaginas;
 
     for (let i = 1; i <= totalPaginas; i++) {
@@ -47,14 +45,14 @@ function carregarPaginacao(totalPaginas) {
         </li>
     `);
 
-    // Navegação de páginas
+
     $('.page-num').click(function (e) {
         e.preventDefault();
         paginaAtual = parseInt($(this).data('page'));
-        recuperarDados();  // Atualiza os dados ao mudar de página
+        recuperarDados();  
     });
 
-    // Navegação anterior e próxima
+
     $('.prev-page').click(function (e) {
         e.preventDefault();
         if (paginaAtual > 1) {
@@ -73,22 +71,18 @@ function carregarPaginacao(totalPaginas) {
 }
 
 function salvamentoLocal() {
-    var id = $('tr[class^="linhaTabela"]');
-    console.log(id)
-    count = id.length;
-    formataIds(id,count)
 
     salvarDados();
 }
 
 function salvarDados() {
-    // Recupera as linhas salvas no localStorage ou cria um array vazio caso não haja
+
     let linhasSalvas = JSON.parse(localStorage.getItem('linhas')) || [];
     
-    // Cria um array temporário para armazenar as linhas visíveis na tela
+
     let linhasVisiveis = [];
 
-    // Processa todas as linhas visíveis na tabela
+
     $('#corpoTabela tr').each(function () {
         var linhaId = $(this).attr('id');
         var novaLinha = {
@@ -105,32 +99,28 @@ function salvarDados() {
             }
         });
 
-        linhasVisiveis.push(novaLinha); // Adiciona a linha visível ao array temporário
+        linhasVisiveis.push(novaLinha); 
     });
 
-    // Verifica se a linha já existe no localStorage antes de adicionar
+
     linhasVisiveis.forEach(function(novaLinha) {
-        // Verifica se algum item com o mesmo indice já existe nas linhas salvas
         let indexExistente = linhasSalvas.findIndex(function(linha) {
             return linha.conteudo.indice === novaLinha.conteudo.indice;
         });
 
-        // Se não encontrar o índice, a linha é adicionada
         if (indexExistente === -1) {
             linhasSalvas.push(novaLinha);
         }
     });
 
-    // Salva as linhas no localStorage, sem duplicação
+
     localStorage.setItem('linhas', JSON.stringify(linhasSalvas));
 
-    // Recalcula o número total de páginas
     let totalPaginas = Math.ceil(linhasSalvas.length / 10);
     if (paginaAtual > totalPaginas) {
         paginaAtual = totalPaginas;
     }
 
-    // Atualiza a tabela com os dados mais recentes
     recuperarDados();
 }
 
@@ -150,7 +140,6 @@ function formataIds(id,count)
                 tr.push(id[i].id)
                 var tdsArray = $('#'+tr[i]).find('td');
                 var numeracaoLinha = tr[i].split('_')[1]
-                console.log(tdsArray)
                 for (let j = 0; j < tdsArray.length; j++) {
                     $(tdsArray[j]).attr('id', atualizarId($(tdsArray[j]).attr('id'), numeracaoLinha));
                 }
@@ -225,6 +214,7 @@ function recuperarDados() {
     let totalLinhas = linhasSalvas.length;
     let totalPaginas = Math.ceil(totalLinhas / 10);
     carregarPaginacao(totalPaginas)
+    formataIds(linhasSalvas,totalLinhas)
     }
 }
 function AddRow(htmlElement, indiceRecuperado = false, posicaoIndice, arrayPaginado) {
