@@ -18,6 +18,22 @@ body {
     border-color:red!important;
 }
 
+tr .id{
+    width: 2%;
+}
+
+tr .descricao{
+    width: 20%;
+}
+
+tr .generico{
+    width:10% ;
+}
+
+tr .checkBoxTbl{
+    width:2% ;
+}
+
 #corpoTabela td{
     border-bottom: 1px solid rgba(0, 0, 0, 0.5)!important;
 }
