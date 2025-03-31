@@ -10,7 +10,13 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    
+
 
     <script src="script.js"></script>
 
@@ -23,12 +29,27 @@
          <br>
          <div id="Menu" class="mb-3 d-flex justify-content-between align-items-center px-2">
             <div class="d-flex">
-                <button class="btn-sm linhaBTN btn-light" id="addLinha" onclick="AddRow(this)"> (+) Adicionar Linhas</button>
-                <button class="btn-sm linhaBTN ml-2 btn-light"  id="removeLinha" onclick="removeRow(this)"> (X) Remover Linha</button>
+                <button class="btn-sm linhaBTN btn-light" id="addLinha" onclick="AddRow(this)">
+                    <span class="fa fa-plus"></span>  Adicionar Linhas
+                </button>
+                <button class="btn-sm linhaBTN ml-2 btn-light" id="removeLinha" onclick="removeRow(this)">
+                    <span class="fa fa-trash"></span>  Remover Linha
+                </button>
             </div>
             <div class="d-flex">
-                <button class="btn-sm linhaBTN btn-light"  id="pesquisar" onclick="">Pesquisar</button>
-                <button class="btn-sm linhaBTN ml-2 btn-light" id="Salvar" onclick="salvamentoLocal()">Salvar Linhas</button>
+             
+                <button class="btn-sm linhaBTN btn-light" id="pesquisar" onclick="">
+                    <i class="fas fa-search"></i> Pesquisar
+                </button>
+                <span style="width:10px ;">&nbsp;</span>
+                <button class=" linhaBTN btn-sm btn-light" onclick="abrirModal()" >
+                    <i class="fas fa-cog"></i> Configurações
+                </button>
+              
+          
+                <button class="btn-sm linhaBTN ml-2 btn-light" id="Salvar" onclick="salvamentoLocal()">
+                    <span class="fa fa-save"></span> Salvar Linhas
+                  </button>
             </div>
         </div>
      </div>
@@ -42,11 +63,12 @@
                     <i class="fa fa-square" aria-hidden="true"></i>
                 </a>
             </th>
+            
             <th class="tituloTabela">ID</th>
             <th class="tituloTabela">NOME</th>
             <th class="tituloTabela">DESCRIÇÃO</th>
             <th class="tituloTabela">TIPO</th>
-            <th class="tituloTabela">TAGS</th>
+            <th class="tituloTabela">CATEGORIA</th>
             <th class="tituloTabela">RESPONSAVEL</th>
             <th class="tituloTabela">DATA</th>
             <th class="tituloTabela">VALOR</th>
@@ -55,12 +77,12 @@
         </tr>
      </thead>
         <tbody id="corpoTabela">
-
+       
         </tbody>
      </table>
      <br>
 
-     <div style="background-color: #4caf50;    padding-left:12.4%; " class="mb-1">
+     <div style="padding-left:12.4%;" id="rodape" class="mb-1">
         <nav aria-label="Page navigation example" style= "padding: 11px;">
             <ul class="pagination">
        
@@ -70,6 +92,93 @@
     
 
  </div>
+
+ <!-- Modal -->
+<div class="modal fade" id="configuracaoModal" tabindex="-1" aria-labelledby="configuracaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="configuracaoModalLabel">Configurações</h5>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs" id="configTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" onclick="alterarAba('fontes',event)" id="fontes-tab" data-bs-toggle="tab" href="#fontes" role="tab" aria-controls="fontes" aria-selected="true">Fontes</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="cores-tab" onclick="alterarAba('cores',event)" data-bs-toggle="tab" href="#cores" role="tab" aria-controls="cores" aria-selected="false">Cores</a>
+                </li>
+            </ul>
+            <div class="row" style="border:1px solid rgba(0, 0, 0, 0.2)"></div>
+      
+            <div class="tab-content" id="configTabsContent">
+                <div class="tab-pane fade show active" id="fontesConteudo" role="tabpanel" aria-labelledby="fontes-tab">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="fontesTH" class="form-label">Alterar Tamanho das fontes de cabeçalho da tabela</label>
+                            <select id="fontesTH" class="selectConfig">
+                                <option value="14">Pequeno</option>
+                                <option value="16">Médio</option>
+                                <option value="18">Grande</option>
+                            </select>
+                        </div>
+                  
+                        <div class="col-md-12 mb-3">
+                            <label for="fontesC" class="form-label">Alterar Tamanho das fontes do título</label>
+                            <select id="fontesC" class="selectConfig">
+                                <option value="32">Pequeno</option>
+                                <option value="36">Médio</option>
+                                <option value="40">Grande</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="fontesTD" class="form-label">Alterar Tamanho das fontes do conteúdo da tabela</label>
+                            <select id="fontesTD" class="selectConfig">
+                                <option value="12">Pequeno</option>
+                                <option value="14">Médio</option>
+                                <option value="16">Grande</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Aba Cores -->
+                <div class="tab-pane fade" id="coresConteudo" role="tabpanel" aria-labelledby="cores-tab">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Alterar cor de fundo:</label>
+                            <div class="color-picker-container">
+                                <input type="color" title="Clique para selecionar as cores" id="colorPickerFundo" value="#4CAF50">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Alterar cor dos Detalhes:</label>
+                            <div class="color-picker-container">
+                                <input type="color" title="Clique para selecionar as cores" id="colorPickerDetalhes" value="#388E3C">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Alterar cor da fonte:</label>
+                            <div class="color-picker-container">
+                                <input type="color" title="Clique para selecionar as cores" id="colorPickerFonte" value="#f4f4f4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="border:1px solid rgba(0, 0, 0, 0.2)"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
+          <button type="button"  class="btn btn-primary"  onclick="salvarCores()" >Salvar Configurações</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 

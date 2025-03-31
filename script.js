@@ -1,7 +1,10 @@
 var indice = localStorage.getItem('indice') ? parseInt(localStorage.getItem('indice')) : 0;
+var padraoFundo = '#4caf50'
+var corFundo = ''
 let paginaAtual = 1;
 const itensPorPagina = 15;
 var novoId = ''
+var modal = ''
 $( document ).ready(function(){
 
     recuperarDados() 
@@ -13,6 +16,8 @@ $( document ).ready(function(){
         AddRow('',true)
     }
     mudaCampos();
+    modal = new bootstrap.Modal($('#configuracaoModal')[0]);
+    inicializarCalendario()
 })
 
 
@@ -20,6 +25,38 @@ $( document ).ready(function(){
 function retornaLinhas() {
     let linhas = JSON.parse(localStorage.getItem('linhas')) || [];
     return linhas;
+}
+
+function inicializarCalendario() {
+    // Adiciona o evento de clique nas células com a classe .data
+    document.querySelectorAll('.data').forEach(function(element) {
+        element.addEventListener('click', function() {
+            // Cria um input dentro da célula da tabela
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.classList.add('form-control');
+            input.classList.add('flatpickr-input');
+            input.value = element.textContent.trim() || ''; // Preenche com o valor atual ou vazio
+
+            // Substitui o conteúdo da célula com o input
+            element.innerHTML = '';
+            element.appendChild(input);
+
+            // Inicializa o flatpickr no input
+            flatpickr(input, {
+                dateFormat: 'd/m/Y', // Formato de data
+                locale: 'pt', // Idioma em português
+                allowInput: true, // Permite digitar a data manualmente
+                onClose: function(selectedDates, dateStr, instance) {
+                    // Atualiza o conteúdo da célula com a data escolhida
+                    element.textContent = dateStr || input.value;
+                }
+            });
+
+            // Foca no input
+            input.focus();
+        });
+    });
 }
 
 
@@ -71,11 +108,10 @@ function carregarPaginacao(totalPaginas) {
 }
 
 function salvamentoLocal() {
-
-    salvarDados();
+    salvarDados(true);
 }
 
-function salvarDados() {
+function salvarDados(reiniciar = false) {
 
     let linhasSalvas = JSON.parse(localStorage.getItem('linhas')) || [];
     
@@ -116,12 +152,13 @@ function salvarDados() {
 
     localStorage.setItem('linhas', JSON.stringify(linhasSalvas));
 
-    let totalPaginas = Math.ceil(linhasSalvas.length / 10);
+    let totalPaginas = Math.ceil(linhasSalvas.length / itensPorPagina);
     if (paginaAtual > totalPaginas) {
         paginaAtual = totalPaginas;
     }
-
+    if(reiniciar){
     recuperarDados();
+    }
 }
 
 
@@ -205,14 +242,14 @@ function recuperarDados() {
     if (linhasSalvas) {
         var arrayPaginado = linhasSalvas.slice(inicio,fim)
         arrayPaginado.forEach(function(linha, index) {
-            if (index < 15) { 
+            if (index < itensPorPagina) { 
                 AddRow('',true,linha.conteudo.indice,arrayPaginado);
             }
         });
     }
     if(linhasSalvas){
     let totalLinhas = linhasSalvas.length;
-    let totalPaginas = Math.ceil(totalLinhas / 10);
+    let totalPaginas = Math.ceil(totalLinhas / itensPorPagina);
     carregarPaginacao(totalPaginas)
     formataIds(linhasSalvas,totalLinhas)
     }
@@ -241,7 +278,7 @@ function AddRow(htmlElement, indiceRecuperado = false, posicaoIndice, arrayPagin
         html += '<td id="' + ids[7] + indice + '" class="conteudoTabela data generico" contenteditable="true"></td>';
         html += '<td id="' + ids[8] + indice + '" class="conteudoTabela valorNumerico generico" placeholder="0,00" onBlur="adicionaNumeros(this)" contenteditable="true"></td>';
         html += '<td id="' + ids[9] + indice + '" class="conteudoTabela select generico" contenteditable="true"></td>';
-        html += '<td id="' + ids[9] + indice + '" class="conteudoTabela select generico" contenteditable="true"></td>';
+        html += '<td id="' + ids[10] + indice + '" class="conteudoTabela select generico" contenteditable="true"></td>';
         html += '</tr>';
         
         // Adiciona a linha ao corpo da tabela
@@ -262,7 +299,19 @@ function AddRow(htmlElement, indiceRecuperado = false, posicaoIndice, arrayPagin
                     
                     let colunas = linha.conteudo.colunas;
                     colunas.forEach((conteudo, colIndex) => {
-                        var classe = colIndex + 3 === 4 ? 'descricao' : 'generico';
+                        var classe = 'generico'; // Classe padrão
+
+                        if (colIndex === 1) {
+                            classe = 'descricao';
+                        } else if ([2,4, 7, 8].includes(colIndex)) {
+                            classe = 'select generico';
+                        } else if (colIndex === 3) {
+                            classe = 'tags';
+                        } else if ( colIndex === 5) {
+                            classe = 'data generico';
+                        } else if (colIndex === 6) {
+                            classe = 'valorNumerico generico';
+                        }
                         html += '<td id="' + ids[colIndex + 2] + posicaoIndice + '" class="conteudoTabela ' + classe + '" contenteditable="true">' + conteudo + '</td>';
                     });
                     html += '</tr>';
@@ -274,7 +323,7 @@ function AddRow(htmlElement, indiceRecuperado = false, posicaoIndice, arrayPagin
 
     if(conteudos){
     let totalLinhas = conteudos.length;
-    let totalPaginas = Math.ceil(totalLinhas / 10);
+    let totalPaginas = Math.ceil(totalLinhas / itensPorPagina);
     carregarPaginacao(totalPaginas);
     }
 }
@@ -347,6 +396,50 @@ async function removeRow(){
         Swal.fire('Cancelado!', 'Operação cancelada', 'error');
         return
     }
+}
+
+
+function abrirModal() {
+    modal.show();
+}
+
+function fecharModal(){
+    modal.hide();
+    $('.modal input').val('')
+}
+
+function alterarAba(tabId,e) {
+    e.preventDefault();
+    $('.tab-pane').removeClass('show active');
+    $('.nav-link').removeClass('active')
+    
+    $('#'+tabId+'-tab').addClass('active')
+    $('#' + tabId + 'Conteudo').addClass('show active');
+}
+
+function salvarCores(){
+   corFundo =  $('#colorPickerFundo').val()
+   corSecundario = $('#colorPickerDetalhes').val()
+   corFonte = $('#colorPickerFonte').val()
+   aplicarCores(corFundo,corSecundario,corFonte)
+}
+
+
+function aplicarCores(corFundo, corSecundario, corFonte) {
+    var elementosFundos = ['.tituloTabela', '.pagination', '.titulo', '#menu', '#rodape'];
+    var detalhesFundos = ['#Menu', '.page-link','#container'];
+
+    var seletor = elementosFundos.join(', ');
+    var seletorSecundario = detalhesFundos.join(', ');
+
+    $(seletor).each(function() {
+        $(this).css('background-color', corFundo);  
+    });
+
+    $(seletorSecundario).each(function() {
+        $(this).css('background-color', corSecundario);
+        this.style.setProperty('background-color', corSecundario, 'important');
+    });
 }
 
  

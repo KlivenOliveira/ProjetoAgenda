@@ -5,9 +5,31 @@ body {
     margin: 0;
 }
 
-.pagination, .pagination-container, .page-item, .page-link {
-    background-color: #388e3c !important;
+.selectConfig {
+    width: 100%;
+    padding: 4px 6px 6px 6px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
 
+.selectConfig:hover {
+    border-color: #007bff;
+}
+
+.selectConfig:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+    outline: none;
+}
+
+
+
+.page-link {
+    background-color: #388e3c !important;
 }
 
 .tituloTabela{
@@ -36,6 +58,8 @@ tr .checkBoxTbl{
 
 #corpoTabela td{
     border-bottom: 1px solid rgba(0, 0, 0, 0.5)!important;
+    border-right:1px solid rgba(0, 0, 0, 0.1)!important;
+    border-left:1px solid rgba(0, 0, 0, 0.1)!important;
 }
 
 /* Ajusta a UL para que ela não ocupe o espaço todo */
@@ -66,8 +90,8 @@ tr .checkBoxTbl{
 }
 
 #container {
-    width: 90%;
-    background-color: #e6efec; /* Fundo mais claro para o container */
+    width: 95%;
+    background-color: #388e3c; /* Fundo mais claro para o container */
     padding: min(20px,5px);
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombras mais sutis */
@@ -80,23 +104,19 @@ tr .checkBoxTbl{
     flex-direction: column; /* Alinha os itens verticalmente */
     align-items: center;
     border-radius: 5px;
-    border: 2px solid rgba(221, 221, 221, 0.5); 
+    border: 3px solid rgba(221, 221, 221, 0.5); 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
     padding-bottom: 1px;
 }
+
+
 
 .titulo p {
     color:#fff;
     padding: min(10px,5px);
 }
 
-#titulo_inicial{
-    border-bottom: 2px solid rgb(12, 133, 76);
-}
 
-#descricaoInicial{
-    border-bottom: 2px solid rgb(12, 133, 76);
-}
 
 .titulo_menu{
     display: flex;
@@ -114,6 +134,8 @@ tr .checkBoxTbl{
     border-radius: 5px; /* Bordas arredondadas para dar um efeito suave */
     width: 100%;
 }
+
+
 
 #Menu {
     display: flex;
@@ -175,6 +197,8 @@ tr .checkBoxTbl{
     border-collapse: collapse;
     margin: auto;
     border-spacing: 0;
+    border: 3px solid rgba(221, 221, 221, 0.5); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
 }
 
 .tituloTabela {
@@ -187,6 +211,7 @@ tr .checkBoxTbl{
     border: 2px solid rgba(221, 221, 221, 0.5); 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
 }
+
 
 .checkBoxTbl input[type="checkbox"] {
     -webkit-appearance: none; 
@@ -261,6 +286,10 @@ tr:nth-child(even) {
     background-color: #f1f1f1; 
 }
 
+#rodape{
+    background-color: #4CAF50;
+}
+
 tr:hover {
     background-color: #e2e2e2; 
 }
@@ -268,3 +297,151 @@ tr:hover {
 .pesquisar{
     padding: min(2px,5px);
 }
+
+#colorPickerFundo {
+    width: 60px;  
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+}
+
+#colorPickerFundo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 3px; /* Esse define a espessura da borda */
+    background: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, purple, pink);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    cursor:crosshair;
+}
+
+
+#colorPickerFundo{
+    padding:0;
+}
+
+#colorPickerFundo::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 50%;
+}
+
+#colorPickerFundo::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+/* Para Firefox */
+#colorPickerFundo::-moz-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+#colorPickerFundo:hover {
+    box-shadow: 0px 0px 10px rgba(2, 231, 248, 0.6);
+}
+
+#colorPickerFundo {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+
+#colorPickerFonte {
+    width: 60px;  
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+}
+
+#colorPickerFonte::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 3px; /* Esse define a espessura da borda */
+    background: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, purple, pink);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    cursor:crosshair;
+}
+
+#colorPickerFonte{
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+
+#colorPickerFonte:hover{
+    box-shadow: 0px 0px 10px rgba(0, 231, 248, 0.6);
+}
+
+#colorPickerFonte{
+    padding:0;
+}
+
+#colorPickerFonte::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 50%;
+}
+
+#colorPickerFonte::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+/* Para Firefox */
+#colorPickerFonte::-moz-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+/* color picker detalhes */
+#colorPickerDetalhes {
+    width: 60px;  
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+}
+
+#colorPickerDetalhes::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 3px; /* Esse define a espessura da borda */
+    background: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, purple, pink);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    cursor:crosshair;
+}
+
+#colorPickerDetalhes{
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+
+#colorPickerDetalhes:hover{
+    box-shadow: 0px 0px 10px rgba(0, 231, 248, 0.6);
+}
+
+#colorPickerDetalhes{
+    padding:0;
+}
+
+#colorPickerDetalhes::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 50%;
+}
+
+#colorPickerDetalhes::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+/* Para Firefox */
+#colorPickerDetalhes::-moz-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+
