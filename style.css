@@ -33,7 +33,7 @@ body {
 }
 
 .tituloTabela{
-    font-weight: bold!important;
+    font-weight:500;
 }
 
 .ativo{
@@ -71,6 +71,7 @@ tr .checkBoxTbl{
     width: 50px!important;
 
 }
+
 
 
 /* Definir a cor dos links */
@@ -165,8 +166,6 @@ tr .checkBoxTbl{
 
 
 .linhaBTN {
-    background-color: #2E7D32; /* Verde escuro */
-    color: white;
     border: none;
     padding: 7px 11px;
     font-size: 10px;
@@ -178,7 +177,6 @@ tr .checkBoxTbl{
 }
 
 .linhaBTN:hover {
-    background-color: #1B5E20; /* Verde mais escuro no hover */
     transform: scale(1.05);
 }
 

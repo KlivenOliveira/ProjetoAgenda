@@ -1,10 +1,16 @@
 var indice = localStorage.getItem('indice') ? parseInt(localStorage.getItem('indice')) : 0;
-var padraoFundo = '#4caf50'
-var corFundo = ''
+var cores = {
+    fundo: localStorage.getItem('fundo') || '',
+    fonte: localStorage.getItem('fonte') ||'',
+    secuncario:localStorage.getItem('secundario') || '',
+    classe: localStorage.getItem('classe') || '',
+  };
 let paginaAtual = 1;
 const itensPorPagina = 15;
-var novoId = ''
-var modal = ''
+var novoId = '';
+var modal = '';
+const array_classes = ['btn-info','btn-light','btn-primary','btn-dark'];
+var botaoDeExemplo = null;
 $( document ).ready(function(){
 
     recuperarDados() 
@@ -17,6 +23,10 @@ $( document ).ready(function(){
     }
     mudaCampos();
     modal = new bootstrap.Modal($('#configuracaoModal')[0]);
+    aplicarCores(cores.fundo,
+        cores.secuncario,
+        cores.fonte,
+        cores.classe);
     inicializarCalendario()
 })
 
@@ -341,6 +351,15 @@ function AddRow(htmlElement, indiceRecuperado = false, posicaoIndice, arrayPagin
             return result.isConfirmed;
         });
     }
+
+    function alerta(text){
+        return Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: text,
+            footer: '<a href="#">O que aconteceu?</a>'
+          });
+    }
     
     function selecionarTudo() {
         // Desabilita o primeiro checkbox (já feito)
@@ -400,7 +419,24 @@ async function removeRow(){
 
 
 function abrirModal() {
-    modal.show();
+    
+    const campos = {
+        '#colorPickerFundo': localStorage.getItem('fundo') || '#4CAF50',
+        '#colorPickerDetalhes': localStorage.getItem('secundario') || '#388E3C',
+        '#colorPickerFonte': localStorage.getItem('fonte') || '#f4f4f4'
+      };
+      Object.entries(campos).forEach(([seletor, valor]) => {
+        $(seletor).val(valor);
+      }); 
+
+      const classeSalva = localStorage.getItem('classe');
+      if (classeSalva) {
+        $('#botaoDeExemplo')
+          .removeClass(array_classes.join(' '))
+          .addClass(classeSalva)
+          .val(classeSalva); // ou .text(classeSalva), depende do botão
+      }
+        modal.show();
 }
 
 function fecharModal(){
@@ -418,19 +454,35 @@ function alterarAba(tabId,e) {
 }
 
 function salvarCores(){
+   let corSecundario = ''
    corFundo =  $('#colorPickerFundo').val()
    corSecundario = $('#colorPickerDetalhes').val()
    corFonte = $('#colorPickerFonte').val()
-   aplicarCores(corFundo,corSecundario,corFonte)
+   classe = $('#botaoDeExemplo').val()
+   aplicarCores(corFundo,corSecundario,corFonte,classe)
+}
+
+function alterarBotao(nova_classe){
+
+        botaoDeExemplo = $('#botaoDeExemplo');
+        botaoDeExemplo.val();
+        array_classes;
+        botaoDeExemplo.removeClass(array_classes);
+        botaoDeExemplo.addClass('btn-'+nova_classe);
+        botaoDeExemplo.val('btn-'+nova_classe);
+        return nova_classe;
 }
 
 
-function aplicarCores(corFundo, corSecundario, corFonte) {
-    var elementosFundos = ['.tituloTabela', '.pagination', '.titulo', '#menu', '#rodape'];
-    var detalhesFundos = ['#Menu', '.page-link','#container'];
-
-    var seletor = elementosFundos.join(', ');
-    var seletorSecundario = detalhesFundos.join(', ');
+function aplicarCores(corFundo, corSecundario, corFonte, classe) {
+    const nova_classe = classe ?? botaoDeExemplo.val();
+    var textosCores = ['#titulo_inicial','#descricaoInicial','.tituloTabela'];
+    const elementosFundos = ['.tituloTabela', '.pagination', '.titulo', '#menu', '#rodape'];
+    const detalhesFundos = ['#Menu', '.page-link','#container'];
+    const botoesPrincipais = $('.botoesParametro');
+    const seletor = elementosFundos.join(', ');
+    const seletorSecundario = detalhesFundos.join(', ');
+    const seletorTextos = textosCores.join(', ');
 
     $(seletor).each(function() {
         $(this).css('background-color', corFundo);  
@@ -440,6 +492,33 @@ function aplicarCores(corFundo, corSecundario, corFonte) {
         $(this).css('background-color', corSecundario);
         this.style.setProperty('background-color', corSecundario, 'important');
     });
+
+    $(botoesPrincipais).each(function(){
+        $(this).removeClass(array_classes);
+        $(this).addClass(nova_classe);
+    });
+
+    if(corFundo != corFonte){
+        $(seletorTextos).each(function(){
+            $(this).css('color', corFonte);
+            this.style.setProperty('color', corFonte, 'important');
+        })
+    }else{
+        corFonte = (corFundo != '#ffffff' && corFundo != '#f4f4f4') ? '#f4f4f4' : '#000000';
+        alerta('Fundo e fonte não podem conter o mesmo valor.');
+        $(seletorTextos).each(function(){
+            $(this).css('color', corFonte);
+            this.style.setProperty('color', corFonte, 'important');
+        })
+        $('#colorPickerFonte').val(corFonte)
+    }
+ 
+ 
+    
+    localStorage.setItem('fundo', corFundo);
+    localStorage.setItem('fonte', corFonte);
+    localStorage.setItem('secundario',corSecundario);
+    localStorage.setItem('classe', nova_classe);
 }
 
  

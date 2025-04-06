@@ -14,6 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="./css/style.css">
 
     
 
@@ -22,32 +23,32 @@
 
 </head>
 <body>
- <div id="container" class="mt-3 container-flex">
+ <div id="container" class="mt-1 mb-1 container-flex">  
      <div class="titulo">
-         <h1 id="titulo_inicial" style="margin-right: -3.5%;">Anotações importantes</h1>
-         <p id="descricaoInicial" class="text-muted" style="margin-top: 0px;margin-right: -3.5%;">Documento usado para descrever atividades realizadas</p>
+         <h1 id="titulo_inicial" style="margin-right: -3.5%;">Titulo personalizavel</h1>
+         <p id="descricaoInicial" class="" style="margin-top: 0px;margin-right: -3.5%;">Descrição personalizavel</p>
          <br>
          <div id="Menu" class="mb-3 d-flex justify-content-between align-items-center px-2">
             <div class="d-flex">
-                <button class="btn-sm linhaBTN btn-light" id="addLinha" onclick="AddRow(this)">
+                <button class="btn-sm linhaBTN btn-light botoesParametro" id="addLinha" onclick="AddRow(this)">
                     <span class="fa fa-plus"></span>  Adicionar Linhas
                 </button>
-                <button class="btn-sm linhaBTN ml-2 btn-light" id="removeLinha" onclick="removeRow(this)">
+                <button class="btn-sm linhaBTN ml-2 btn-light botoesParametro" id="removeLinha" onclick="removeRow(this)">
                     <span class="fa fa-trash"></span>  Remover Linha
                 </button>
             </div>
             <div class="d-flex">
              
-                <button class="btn-sm linhaBTN btn-light" id="pesquisar" onclick="">
+                <button class="btn-sm linhaBTN btn-light botoesParametro" id="pesquisar" onclick="">
                     <i class="fas fa-search"></i> Pesquisar
                 </button>
                 <span style="width:10px ;">&nbsp;</span>
-                <button class=" linhaBTN btn-sm btn-light" onclick="abrirModal()" >
+                <button class=" linhaBTN btn-sm btn-light botoesParametro" onclick="abrirModal()" >
                     <i class="fas fa-cog"></i> Configurações
                 </button>
               
           
-                <button class="btn-sm linhaBTN ml-2 btn-light" id="Salvar" onclick="salvamentoLocal()">
+                <button class="btn-sm linhaBTN ml-2 btn-light botoesParametro" id="Salvar" onclick="salvamentoLocal()">
                     <span class="fa fa-save"></span> Salvar Linhas
                   </button>
             </div>
@@ -68,7 +69,7 @@
             <th class="tituloTabela">NOME</th>
             <th class="tituloTabela">DESCRIÇÃO</th>
             <th class="tituloTabela">TIPO</th>
-            <th class="tituloTabela">CATEGORIA</th>
+            <th class="tituloTabela">TAG</th>
             <th class="tituloTabela">RESPONSAVEL</th>
             <th class="tituloTabela">DATA</th>
             <th class="tituloTabela">VALOR</th>
@@ -83,7 +84,7 @@
      <br>
 
      <div style="padding-left:12.4%;" id="rodape" class="mb-1">
-        <nav aria-label="Page navigation example" style= "padding: 11px;">
+        <nav aria-label="Page navigation example" style= "padding: 4px;">
             <ul class="pagination">
        
             </ul>
@@ -108,6 +109,11 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="cores-tab" onclick="alterarAba('cores',event)" data-bs-toggle="tab" href="#cores" role="tab" aria-controls="cores" aria-selected="false">Cores</a>
                 </li>
+
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="corBotao-tab" onclick="alterarAba('corBotao',event)" data-bs-toggle="tab" href="#botoes" role="tab" aria-controls="cores" aria-selected="false">Botoes</a>
+                </li>
+
             </ul>
             <div class="row" style="border:1px solid rgba(0, 0, 0, 0.2)"></div>
       
@@ -115,7 +121,7 @@
                 <div class="tab-pane fade show active" id="fontesConteudo" role="tabpanel" aria-labelledby="fontes-tab">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="fontesTH" class="form-label">Alterar Tamanho das fontes de cabeçalho da tabela</label>
+                            <label for="fontesTH" class="form-label mt-3" >Alterar Tamanho das fontes de cabeçalho da tabela</label>
                             <select id="fontesTH" class="selectConfig">
                                 <option value="14">Pequeno</option>
                                 <option value="16">Médio</option>
@@ -134,7 +140,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="fontesTD" class="form-label">Alterar Tamanho das fontes do conteúdo da tabela</label>
+                            <label for="fontesTD" class="form-label ">Alterar Tamanho das fontes do conteúdo da tabela</label>
                             <select id="fontesTD" class="selectConfig">
                                 <option value="12">Pequeno</option>
                                 <option value="14">Médio</option>
@@ -148,7 +154,7 @@
                 <div class="tab-pane fade" id="coresConteudo" role="tabpanel" aria-labelledby="cores-tab">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label class="form-label">Alterar cor de fundo:</label>
+                            <label class="form-label mt-3">Alterar cor de fundo:</label>
                             <div class="color-picker-container">
                                 <input type="color" title="Clique para selecionar as cores" id="colorPickerFundo" value="#4CAF50">
                             </div>
@@ -169,12 +175,30 @@
                         </div>
                     </div>
                 </div>
+                      <!-- Aba botoes -->
+                        <div class="tab-pane fade" id="corBotaoConteudo" role="tabpanel" aria-labelledby="coresBotao-tab">
+                            <div class="row">
+                                <div class="col-md-12 mb-5">
+                                    <label for="corBotaoSelect" class="form-label mt-3">Alterar cores de botoes</label>
+                                    <select id="corBotaoSelect" onchange="alterarBotao(this.value)" class="selectConfig">
+                                        <option value="light">Padrão</option>
+                                        <option value="info">Informativo</option>
+                                        <option value="primary">Primario</option>
+                                        <option value="dark">Noturno</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <label for="fontesTD" class="form-label"><span>Exemplos:</span></label>
+                                    <button  id="botaoDeExemplo"class="btn-sm linhaBTN btn-light "><span class="fa fa-plus"></span>  Adicionar Linhas</button>
+                                </div>
+                            </div>
+                        </div>
             </div>
         </div>
         <div style="border:1px solid rgba(0, 0, 0, 0.2)"></div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
-          <button type="button"  class="btn btn-primary"  onclick="salvarCores()" >Salvar Configurações</button>
+          <button type="button" class="btn-sm btn-secondary" onclick="fecharModal()">Fechar</button>
+          <button type="button"  class="btn-sm btn-primary "  onclick="salvarCores()" >Salvar Configurações</button>
         </div>
       </div>
     </div>
