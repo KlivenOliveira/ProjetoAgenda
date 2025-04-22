@@ -5,6 +5,10 @@ var cores = {
     secuncario:localStorage.getItem('secundario') || '',
     classe: localStorage.getItem('classe') || '',
   };
+
+  var fonte = {
+    tamanhoFonte: localStorage.getItem('fontesTH') || '',
+  };
 let paginaAtual = 1;
 const itensPorPagina = 15;
 var novoId = '';
@@ -27,6 +31,9 @@ $( document ).ready(function(){
         cores.secuncario,
         cores.fonte,
         cores.classe);
+    aplicarFontes(
+        fonte.tamanhoFonte,
+    )
     inicializarCalendario()
 })
 
@@ -425,7 +432,17 @@ function abrirModal() {
         '#colorPickerDetalhes': localStorage.getItem('secundario') || '#388E3C',
         '#colorPickerFonte': localStorage.getItem('fonte') || '#f4f4f4'
       };
+
+      const fontes = {
+        '#fontesTH': localStorage.getItem('fontesTH') || '0',
+        '#fontesTD': localStorage.getItem('fontesTD') || 'Arial'
+    };
+
       Object.entries(campos).forEach(([seletor, valor]) => {
+        $(seletor).val(valor);
+      }); 
+
+      Object.entries(fontes).forEach(([seletor, valor]) => {
         $(seletor).val(valor);
       }); 
 
@@ -438,6 +455,47 @@ function abrirModal() {
       }
         modal.show();
 }
+
+function salvarFontes(){
+    let tamanhoFonte = $('#fontesTH').val() 
+    let tipoFonte = $('#fontesType').val()  
+    aplicarFontes(tamanhoFonte)
+ }
+
+ function pegarTamanhoFonte(elemento) {
+    return parseInt($(elemento).css('font-size'));
+}
+
+function aplicarFontes(tamanhoFonte,tipoFonte){
+    let tamanhoFonteTabela = pegarTamanhoFonte('#tabela') 
+    let tamanhoFonteRodape = pegarTamanhoFonte('#rodape') 
+    let tamanhoFonteTitulo = pegarTamanhoFonte('#titulo_inicial') 
+
+    let localFonteTabela = (parseInt(tamanhoFonte) + tamanhoFonteTabela) + 'px';
+    let localFonteRodape = (parseInt(tamanhoFonte)  + tamanhoFonteRodape) + 'px';
+    let localFonteTitulo = (parseInt(tamanhoFonte)  + tamanhoFonteTitulo) + 'px';
+    
+    // Ajusta o tamanho da fonte com base na referência
+    $('#tabela').css({
+        'font-size':localFonteTabela,
+        'font-family': tipoFonte
+    });
+
+    $('#rodape').css({
+        'font-size': localFonteRodape,
+        'font-family': tipoFonte
+    });
+
+    $('#titulo_inicial, #descricaoInicial').css({
+        'font-size':localFonteTitulo,
+        'font-family': tipoFonte
+    });
+
+    localStorage.setItem('tamanhoFonteTabela', localFonteTabela);
+    localStorage.setItem('tamanhoFonteRodape', localFonteRodape);
+    localStorage.setItem('tamanhoFonteTitulo',localFonteTitulo);
+}
+
 
 function fecharModal(){
     modal.hide();
@@ -463,7 +521,6 @@ function salvarCores(){
 }
 
 function alterarBotao(nova_classe){
-
         botaoDeExemplo = $('#botaoDeExemplo');
         botaoDeExemplo.val();
         array_classes;
@@ -512,9 +569,6 @@ function aplicarCores(corFundo, corSecundario, corFonte, classe) {
         })
         $('#colorPickerFonte').val(corFonte)
     }
- 
- 
-    
     localStorage.setItem('fundo', corFundo);
     localStorage.setItem('fonte', corFonte);
     localStorage.setItem('secundario',corSecundario);

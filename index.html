@@ -121,30 +121,25 @@
                 <div class="tab-pane fade show active" id="fontesConteudo" role="tabpanel" aria-labelledby="fontes-tab">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="fontesTH" class="form-label mt-3" >Alterar Tamanho das fontes de cabeçalho da tabela</label>
+                            <label for="fontesTH" class="form-label mt-3" >Alterar Tamanho das fontes</label>
                             <select id="fontesTH" class="selectConfig">
-                                <option value="14">Pequeno</option>
-                                <option value="16">Médio</option>
-                                <option value="18">Grande</option>
+                                <option value="2">Pequeno</option>
+                                <option value="4">Médio</option>
+                                <option value="6">Grande</option>
                             </select>
                         </div>
                   
-                        <div class="col-md-12 mb-3">
-                            <label for="fontesC" class="form-label">Alterar Tamanho das fontes do título</label>
-                            <select id="fontesC" class="selectConfig">
-                                <option value="32">Pequeno</option>
-                                <option value="36">Médio</option>
-                                <option value="40">Grande</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="fontesTD" class="form-label ">Alterar Tamanho das fontes do conteúdo da tabela</label>
-                            <select id="fontesTD" class="selectConfig">
-                                <option value="12">Pequeno</option>
-                                <option value="14">Médio</option>
-                                <option value="16">Grande</option>
+                            <label for="fontesType" class="form-label">Alterar tipo de fonte</label>
+                            <select id="fontesType" class="selectConfig">
+                                <option value="Arial">Arial</option>
+                                <option value="Verdana">Verdana</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Courier New">Courier New</option>
+                                <option value="Tahoma">Tahoma</option>
                             </select>
                         </div>
                     </div>
@@ -198,7 +193,7 @@
         <div style="border:1px solid rgba(0, 0, 0, 0.2)"></div>
         <div class="modal-footer">
           <button type="button" class="btn-sm btn-secondary" onclick="fecharModal()">Fechar</button>
-          <button type="button"  class="btn-sm btn-primary "  onclick="salvarCores()" >Salvar Configurações</button>
+          <button type="button"  class="btn-sm btn-primary "  onclick="salvarCores(), salvarFontes()" >Salvar Configurações</button>
         </div>
       </div>
     </div>
