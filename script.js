@@ -34,6 +34,7 @@ $( document ).ready(function(){
     aplicarFontes(
         fonte.tamanhoFonte,
     )
+    inicializarSelect()
     inicializarCalendario()
 })
 
@@ -45,15 +46,16 @@ function retornaLinhas() {
 }
 
 function inicializarCalendario() {
-    // Adiciona o evento de clique nas células com a classe .data
-    document.querySelectorAll('.data').forEach(function(element) {
-        element.addEventListener('click', function() {
+    document.addEventListener('click', function(event) {
+        // Verifica se o clique foi em um elemento com a classe 'data'
+        if (event.target.classList.contains('data')) {
+            let element = event.target;
+
             // Cria um input dentro da célula da tabela
             var input = document.createElement('input');
             input.type = 'text';
-            input.classList.add('form-control');
-            input.classList.add('flatpickr-input');
-            input.value = element.textContent.trim() || ''; // Preenche com o valor atual ou vazio
+            input.classList.add('form-control', 'flatpickr-input');
+            input.value = element.textContent.trim() || '';
 
             // Substitui o conteúdo da célula com o input
             element.innerHTML = '';
@@ -61,20 +63,20 @@ function inicializarCalendario() {
 
             // Inicializa o flatpickr no input
             flatpickr(input, {
-                dateFormat: 'd/m/Y', // Formato de data
-                locale: 'pt', // Idioma em português
-                allowInput: true, // Permite digitar a data manualmente
-                onClose: function(selectedDates, dateStr, instance) {
-                    // Atualiza o conteúdo da célula com a data escolhida
+                dateFormat: 'd/m/Y',
+                locale: 'pt',
+                allowInput: true,
+                onClose: function(selectedDates, dateStr) {
                     element.textContent = dateStr || input.value;
                 }
             });
 
             // Foca no input
             input.focus();
-        });
+        }
     });
 }
+
 
 
 
@@ -202,7 +204,7 @@ function formataIds(id,count)
    }
 
    function mudaCampos() {
-    $(".conteudoTabela").on("input", function () {
+    $(document).on("input", ".conteudoTabela", function () {
         let valor = $(this).text();
 
         if ($(this).hasClass("numerico")) {
@@ -238,9 +240,10 @@ function formataIds(id,count)
 }
 
 
+
 function adicionaNumeros(htmlElement){
     let valor = $(htmlElement).text();   
-    if (valor.includes(',')) {
+    if (valor.includes(',') && !valor.includes('R$')) {
         $(htmlElement).text(valor + 'R$');
     }
 }
@@ -249,6 +252,52 @@ function adicionaNumeros(htmlElement){
 function atualizarId(id, indice) {
     return id.replace(/I___\d*$/, indice);
 }
+
+function inicializarSelect() {
+    // Usa delegação de eventos para as novas linhas
+    $('#corpoTabela').on('click', '.select.generico', function() {
+        let $element = $(this);
+
+        if ($element.find('select').length) return;  // Já tem select? Não recria.
+
+        let valorAtual = $element.text().trim();
+        let select = $('<select class="form-control"></select>');
+
+        // Exemplos de opções para cada tipo
+        let opcoes = [];
+        if ($element.hasClass('tipo')) {
+            opcoes = ["Tipo 1", "Tipo 2", "Tipo 3"];  // Exemplo para a coluna 'tipo'
+        } else if ($element.hasClass('prioridade')) {
+            opcoes = ["Alta", "Média", "Baixa"];  // Exemplo para a coluna 'prioridade'
+        } else if ($element.hasClass('pago')) {
+            opcoes = ["Sim", "Não"];  // Exemplo para a coluna 'pago'
+        }
+
+        opcoes.forEach(function(opcao) {
+            let option = $('<option></option>').val(opcao).text(opcao);
+            if (opcao === valorAtual) {
+                option.prop('selected', true);
+            }
+            select.append(option);
+        });
+
+        // Limpa o conteúdo do td e adiciona o select
+        $element.empty().append(select);
+        select.focus();
+
+        // Quando o select perde o foco, atualiza o valor no td
+        select.on('change', function() {
+            $element.text(select.val());
+        });
+
+        // Adiciona o evento de blur para atualizar o valor
+        select.on('blur', function() {
+            $element.text(select.val());
+        });
+    });
+}
+
+
 
 
 function recuperarDados() {
@@ -289,13 +338,13 @@ function AddRow(htmlElement, indiceRecuperado = false, posicaoIndice, arrayPagin
         html += '<td id="' + ids[1] + indice + '" class="conteudoTabela id" disabled>' + indice + '</td>';
         html += '<td id="' + ids[2] + indice + '" class="conteudoTabela generico" contenteditable="true"></td>';
         html += '<td id="' + ids[3] + indice + '" class="conteudoTabela descricao" contenteditable="true"></td>';
-        html += '<td id="' + ids[4] + indice + '" class="conteudoTabela select generico" contenteditable="true"></td>';
+        html += '<td id="' + ids[4] + indice + '" class="conteudoTabela select generico tipo" contenteditable="true"></td>';
         html += '<td id="' + ids[5] + indice + '" class="conteudoTabela tags" contenteditable="true"></td>';
         html += '<td id="' + ids[6] + indice + '" class="conteudoTabela generico" contenteditable="true"></td>';
         html += '<td id="' + ids[7] + indice + '" class="conteudoTabela data generico" contenteditable="true"></td>';
         html += '<td id="' + ids[8] + indice + '" class="conteudoTabela valorNumerico generico" placeholder="0,00" onBlur="adicionaNumeros(this)" contenteditable="true"></td>';
-        html += '<td id="' + ids[9] + indice + '" class="conteudoTabela select generico" contenteditable="true"></td>';
-        html += '<td id="' + ids[10] + indice + '" class="conteudoTabela select generico" contenteditable="true"></td>';
+        html += '<td id="' + ids[9] + indice + '" class="conteudoTabela select generico prioridade" contenteditable="true"></td>';
+        html += '<td id="' + ids[10] + indice + '" class="conteudoTabela select generico pago" contenteditable="true"></td>';
         html += '</tr>';
         
         // Adiciona a linha ao corpo da tabela
@@ -322,6 +371,15 @@ function AddRow(htmlElement, indiceRecuperado = false, posicaoIndice, arrayPagin
                             classe = 'descricao';
                         } else if ([2,4, 7, 8].includes(colIndex)) {
                             classe = 'select generico';
+                            if(colIndex == 4){
+                                classe += 'tipo'
+                            }
+                            if(colIndex == 7){
+                                classe += 'prioridade'
+                            }
+                            if( colIndex == 8){
+                                classe += 'pago'
+                            }
                         } else if (colIndex === 3) {
                             classe = 'tags';
                         } else if ( colIndex === 5) {
